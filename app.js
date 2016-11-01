@@ -35,7 +35,7 @@ function countWords(text) {
 			count++;
 		};
 	};
-	if (!whiteSpace.test(current)) {
+	if (!whiteSpace.test(current) && !whiteSpace.test(prev)) {
 		count++;
 	};
 	return count;
