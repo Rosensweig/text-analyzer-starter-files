@@ -1,3 +1,4 @@
+// Completed 10/31/16, refactored 11/2/16
 $(function() {
 	handleSubmit();
 });
