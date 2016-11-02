@@ -2,6 +2,8 @@ $(function() {
 	handleSubmit();
 });
 
+// Event listener and main organization point.
+// Calls other methods to calculate and display.
 function handleSubmit() {
 	$("form").submit(function(event) {
 		event.preventDefault();
@@ -14,6 +16,8 @@ function handleSubmit() {
 	});
 };
 
+// Removing punctuation is necessary for counting unique words,
+// so that "this" is not a different word from "this."
 function removePunc(text) {
 	var punc = /[^\w\s]/g;
 	var noPunc = text.replace(punc,"");
@@ -21,43 +25,23 @@ function removePunc(text) {
 };
 
 function countWords(text) {
-	if (text==="") {
-		return 0;
-	};
-	var prev;
-	var current=text[0];
-	var whiteSpace = /\s/g;
-	count=0;
-	for (var i=1; i<text.length; i++) {
-		prev=current;
-		current=text[i];
-		if (whiteSpace.test(current) && !whiteSpace.test(prev)) {
-			count++;
-		};
-	};
-	if (!whiteSpace.test(current) && !whiteSpace.test(prev)) {
-		count++;
-	};
-	return count;
+	var wordArray = text.toLowerCase().split(" ");
+	return wordArray.length;
 };
 
 function countUnique(text) {
 	var wordArray = removePunc(text).toLowerCase().split(" ");
-	var count=0;
+	var used=[wordArray[0]];
 	for (var i=0; i<wordArray.length-1; i++) {
-		var duplicate=false;
-		for (var j=i+1; j<wordArray.length; j++) {
-			if (wordArray[i]===wordArray[j]) {
-				duplicate=true;
+		for (var j=0; j<used.length; j++) {
+			if (wordArray[i]===used[j]) {
 				break;
+			} else if (j===used.length-1) {
+				used.push(wordArray[i]);
 			};
 		};
-		if (!duplicate) {
-			count++;
-			duplicate=false;
-		};
 	};
-	return ++count;
+	return used.length;
 };
 
 function calcAveWord(text, words) {
@@ -69,12 +53,11 @@ function calcAveWord(text, words) {
 function calcAveSentence(text, words) {
 	var sentences = text.split(/[.!?]/);
 	var numSentences = sentences.length;
-	var totalWords = 0;
 	for (var i=0; i<sentences.length; i++) {
 		if (sentences[i]==="") {
 			numSentences--;
-		}
-	}
+		};
+	};
 	return words/numSentences;
 }
 
